@@ -4,6 +4,10 @@ duty=${1}
 PROJECT_KEY_PATH=${2}
 
 # Permissions, keys
+mkdir ~/.ssh
+chmod 700 ~/.ssh
+touch ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
 echo 'eval `ssh-agent` &> /dev/null' | sudo tee -a ~/.bashrc
 echo "ssh-add $PROJECT_KEY_PATH &> /dev/null" | sudo tee -a ~/.bashrc
 echo 'export WORKER_NAME=$(cat /proc/sys/kernel/hostname | cut -d'.' -f1)' | sudo tee -a ~/.bashrc
