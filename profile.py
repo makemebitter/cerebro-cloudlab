@@ -36,7 +36,8 @@ pc.defineParameter("jupyterPassword", "The password of jupyter notebook, default
                    portal.ParameterType.STRING, 'root')
 pc.defineParameter("publicIPSlaves", "Request public IP addresses for the slaves or not",
                    portal.ParameterType.BOOLEAN, True)
-
+pc.defineParameter("setupExperiments", "Setup the experiments and datasets described by the paper or not. Don't set this if you don't know what it's for.",
+                   portal.ParameterType.BOOLEAN, False)
 pc.defineParameter("privateKey", "Your private ssh key, this is required for setting up.",
                    portal.ParameterType.STRING, "",
                    longDescription='''Please create a project
@@ -50,6 +51,8 @@ params = pc.bindParameters()
 proper_key = '\n'.join(params.privateKey.split())
 proper_key = '-----BEGIN RSA PRIVATE KEY-----\n' + \
     proper_key + '\n-----END RSA PRIVATE KEY-----\n'
+
+setup_exp = 'true' if params.setupExperiments else 'false'
 
 
 def create_request(request, role, ip, worker_num=None):
@@ -69,8 +72,8 @@ def create_request(request, role, ip, worker_num=None):
     req.disk_image = DISK_IMG
     req.addService(pg.Execute(
         'bash',
-        "sudo bash /local/repository/bootstrap.sh '{}' '{}' '{}' 2>&1 | sudo tee -a /local/logs/setup.log".format(
-            role, params.jupyterPassword, proper_key)))
+        "sudo bash /local/repository/bootstrap.sh '{}' '{}' '{}' '{}' 2>&1 | sudo tee -a /local/logs/setup.log".format(
+            role, params.jupyterPassword, proper_key, setup_exp)))
     iface = req.addInterface(
         'eth1', pg.IPv4Address(ip, '255.255.255.0'))
     return iface

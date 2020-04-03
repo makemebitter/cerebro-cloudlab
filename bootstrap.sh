@@ -4,6 +4,7 @@ set -e
 duty=${1}
 JUPYTER_PASSWORD=${2:-"root"}
 PRIVATE_KEY=${3}
+SETUP_EXP=${4:-false}
 FILE_PATH=/local/host_list
 PROJECT_KEY_PATH=/local/project_key
 PROJECT_USER=project
