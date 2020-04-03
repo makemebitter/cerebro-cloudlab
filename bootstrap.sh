@@ -25,8 +25,8 @@ sudo bash -c 'cat >> /etc/security/limits.conf <<-EOF
 * hard nproc 131072
 
 EOF'
-chmod 777 /local/logs
-chmod 666 -R /local/logs/*
+sudo chmod 777 -R /local
+sudo chmod 666 -R /local/logs/*
 
 
 # --------------------- Check if every host online ----------------------------
@@ -66,38 +66,10 @@ fi
 echo "${PRIVATE_KEY}" > $PROJECT_KEY_PATH
 sudo chown $PROJECT_USER $PROJECT_KEY_PATH
 sudo chmod 600 $PROJECT_KEY_PATH
-echo 'eval `ssh-agent` &> /dev/null' | sudo tee -a /home/$PROJECT_USER/.bashrc
-echo "ssh-add $PROJECT_KEY_PATH &> /dev/null" | sudo tee -a /home/$PROJECT_USER/.bashrc
-sudo ssh-keygen -y -f $PROJECT_KEY_PATH | sudo tee -a /home/$PROJECT_USER/.ssh/authorized_keys
-sudo chown -R $PROJECT_USER:$PROJECT_USER /home/$PROJECT_USER
+
 
 # Setup cerebro
-sudo -H -u $PROJECT_USER bash /local/repository/setup.sh ${duty}
-
-# ------------------------- system settings -----------------------------------
-git clone --single-branch --branch data_pipeline_test git@github.com:scnakandala/cerebro.git /local/cerebro
-git clone https://github.com/scnakandala/cerebro.git
-git clone https://github.com/greenplum-db/gporca.git /local/gporca
-git clone https://github.com/greenplum-db/gp-xerces.git /local/gp-xerces
-git clone https://github.com/apache/madlib.git /local/madlib
-chmod 777 /local/gpdb_src /local/gporca /local/gp-xerces /local/madlib
-
-
-
-# -----------------------------------------------------------------------------
-
-# greenplum key
-echo "${PRIVATE_KEY}" > $PROJECT_KEY_PATH
-chown gpadmin $PROJECT_KEY_PATH
-chmod 600 $PROJECT_KEY_PATH
-ssh-keygen -y -f $PROJECT_KEY_PATH >> /home/gpadmin/.ssh/authorized_keys
-
-
-
-# compile, install, and run gpdb, compile and install madlib
-sudo -H -u  gpadmin bash /local/repository/install_gpdb.sh ${duty}
-
-
+sudo -H -u $PROJECT_USER bash /local/repository/setup.sh ${duty} ${PROJECT_KEY_PATH}
 
 # -----------------------------------------------------------------------------
 # Running Jupyter deamons
@@ -119,8 +91,8 @@ if [ "$duty" = "m" ]; then
   HASHED_PASSWORD=$(python3 -c "from notebook.auth import passwd; print(passwd('$JUPYTER_PASSWORD'))");
   echo "c.NotebookApp.password = u'$HASHED_PASSWORD'" >~/.jupyter/jupyter_notebook_config.py;
   echo "c.NotebookApp.open_browser = False" >>~/.jupyter/jupyter_notebook_config.py;
-    sudo nohup docker run --init -p 3000:3000 -v "/:/home/project:cached" theiaide/theia-python:next > /dev/null 2>&1 &
-    sudo nohup jupyter notebook --no-browser --allow-root --ip 0.0.0.0 --notebook-dir=/ > /dev/null 2>&1 &
+    sudo -u $PROJECT_USER nohup docker run --init -p 3000:3000 -v "/:/home/project:cached" theiaide/theia-python:next > /dev/null 2>&1 &
+    sudo -u $PROJECT_USER nohup jupyter notebook --no-browser --allow-root --ip 0.0.0.0 --notebook-dir=/ > /dev/null 2>&1 &
 fi
 
 # elif [ "$duty" = "s" ]; then
