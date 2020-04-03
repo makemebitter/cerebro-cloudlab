@@ -4,7 +4,7 @@ set -e
 duty=${1}
 JUPYTER_PASSWORD=${2:-"root"}
 PRIVATE_KEY=${3}
-SETUP_EXP=${4:-false}
+SETUP_EXP=${4:-"false"}
 FILE_PATH=/local/host_list
 PROJECT_KEY_PATH=/local/project_key
 PROJECT_USER=project
@@ -70,7 +70,7 @@ sudo chmod 600 $PROJECT_KEY_PATH
 
 
 # Setup cerebro
-sudo -H -u $PROJECT_USER bash /local/repository/setup.sh ${duty} ${PROJECT_KEY_PATH}
+# sudo -H -u $PROJECT_USER bash /local/repository/setup.sh ${duty} ${PROJECT_KEY_PATH}
 
 # -----------------------------------------------------------------------------
 # Running Jupyter deamons
