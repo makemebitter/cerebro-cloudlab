@@ -37,7 +37,7 @@ pc.defineParameter("jupyterPassword", "The password of jupyter notebook, default
 pc.defineParameter("publicIPSlaves", "Request public IP addresses for the slaves or not",
                    portal.ParameterType.BOOLEAN, True)
 
-pc.defineParameter("privateKey", "Your private ssh key, this is required for Horovod.",
+pc.defineParameter("privateKey", "Your private ssh key, this is required for setting up.",
                    portal.ParameterType.STRING, "",
                    longDescription='''Please create a project
                    private key and upload it also to your cloudlab account.
