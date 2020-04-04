@@ -70,14 +70,14 @@ sudo chmod 600 $PROJECT_KEY_PATH
 
 
 # Setup cerebro
-# sudo -H -u $PROJECT_USER bash /local/repository/setup.sh ${duty} ${PROJECT_KEY_PATH}
+sudo -H -u $PROJECT_USER bash /local/repository/setup.sh ${duty} ${PROJECT_KEY_PATH}
 
 # -----------------------------------------------------------------------------
 # Running Jupyter deamons
 if [ "$duty" = "m" ]; then
   # python
-  pip3 install --upgrade six
-  pip3 install -r /local/repository/requirements_master.txt;
+  pip install --upgrade six
+  pip install -r /local/repository/requirements_master.txt;
   # Jupyter extension configs
   sudo /usr/local/bin/jupyter contrib nbextension install --system ;
   sudo /usr/local/bin/jupyter nbextensions_configurator enable --system ;

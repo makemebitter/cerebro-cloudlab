@@ -21,7 +21,9 @@ sudo sh -c 'cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/s
     sudo mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
 
 source ~/.bashrc
-git clone --single-branch --branch data_pipeline_test git@github.com:scnakandala/cerebro.git /local/cerebro
+ssh-agent bash -c "ssh-add $PROJECT_KEY_PATH; git clone --single-branch --branch data_pipeline_test git@github.com:scnakandala/cerebro.git /local/cerebro"
+
+
 
 cd /local/cerebro
 bash cloudlab_setup_cpu.sh ${duty}
