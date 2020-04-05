@@ -75,9 +75,17 @@ sudo -H -u $PROJECT_USER bash /local/repository/setup.sh ${duty} ${PROJECT_KEY_P
 # -----------------------------------------------------------------------------
 # Running Jupyter deamons
 if [ "$duty" = "m" ]; then
+  sudo apt-get install -y build-essential checkinstall software-properties-common
+  sudo apt-get install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev \
+    libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
+
   # python
-  pip install --upgrade six
-  pip install -r /local/repository/requirements_master.txt;
+  sudo add-apt-repository -y ppa:deadsnakes/ppa
+  sudo apt install -y python3.6
+  curl https://bootstrap.pypa.io/get-pip.py | sudo python3.6
+
+  sudo pip3 install --upgrade six
+  sudo pip3 install jupyter jupyter_contrib_nbextensions jupyter_nbextensions_configurator;
   # Jupyter extension configs
   sudo /usr/local/bin/jupyter contrib nbextension install --system ;
   sudo /usr/local/bin/jupyter nbextensions_configurator enable --system ;
