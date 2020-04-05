@@ -70,7 +70,7 @@ sudo chmod 600 $PROJECT_KEY_PATH
 
 
 # Setup cerebro
-sudo -H -u $PROJECT_USER bash /local/repository/setup.sh ${duty} ${PROJECT_KEY_PATH}
+sudo -H -u $PROJECT_USER bash /local/repository/setup.sh ${duty} ${PROJECT_KEY_PATH} ${SETUP_EXP}
 
 # -----------------------------------------------------------------------------
 # Running Jupyter deamons
@@ -107,6 +107,8 @@ fi
 # elif [ "$duty" = "s" ]; then
 #   gpssh-exkeys -f hostlist_singlenode
 # fi
+
+
 echo "Bootstraping complete"
 
 

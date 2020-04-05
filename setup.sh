@@ -2,6 +2,7 @@
 set -e
 duty=${1}
 PROJECT_KEY_PATH=${2}
+SETUP_EXP=${3:-"false"}
 
 # Permissions, keys
 mkdir ~/.ssh
@@ -27,3 +28,7 @@ ssh-agent bash -c "ssh-add $PROJECT_KEY_PATH; git clone --single-branch --branch
 
 cd /local/cerebro
 bash cloudlab_setup_cpu.sh ${duty}
+
+if [ $SETUP_EXP = 'true' ]; then
+    bash /local/cerebro/exps/setup.sh ${duty}
+fi
