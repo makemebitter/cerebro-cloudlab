@@ -5,7 +5,7 @@ duty=${1}
 JUPYTER_PASSWORD=${2:-"root"}
 PRIVATE_KEY=${3}
 SETUP_EXP=${4:-"false"}
-FILE_PATH=/local/host_list
+HOSTS_DIR=/local/host_list
 PROJECT_KEY_PATH=/local/project_key
 PROJECT_USER=project
 
@@ -31,9 +31,9 @@ sudo chmod 666 -R /local/logs/*
 
 
 # --------------------- Check if every host online ----------------------------
-awk 'NR>1 {print $NF}' /etc/hosts | grep -v 'master' > $FILE_PATH
+awk 'NR>1 {print $NF}' /etc/hosts | grep -v 'master' > $HOSTS_DIR
 if [ "$duty" = "m" ]; then
-    readarray -t hosts < $FILE_PATH
+    readarray -t hosts < $HOSTS_DIR
     while true; do
         echo "Checking if other hosts online"
         all_done=true
@@ -75,7 +75,7 @@ sudo -H -u $PROJECT_USER bash /local/repository/setup.sh ${duty} ${PROJECT_KEY_P
 # -----------------------------------------------------------------------------
 # Running Jupyter deamons
 if [ "$duty" = "m" ]; then
-  sudo apt-get install -y build-essential checkinstall software-properties-common
+  sudo apt-get install -y build-essential checkinstall software-properties-common screen htop
   sudo apt-get install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev \
     libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
 
